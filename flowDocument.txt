@@ -1,0 +1,28 @@
+
+--------------------
+Simple Tasks App
+--------------------
+
+
+--------------------
+POST /api/users/register
+Data: email, password
+Main Goal: create new user account
+Other Goals: sending email with verification code if is not verified, when is verified continue register
+Return: Access Token with Refresh Token or nothing when email verification is in progress
+--------------------
+
+--------------------
+POST /api/users/login
+Data: email, password
+Main Goal: find user and log in when login data is valid
+Return: Access Token with Refresh Token
+--------------------
+
+--------------------
+POST /api/users/verify
+Data: email, emailCode
+Main Goal: Verify email with code
+Return: valid or not valid code
+--------------------
+

@@ -16,7 +16,7 @@ export function serverErrorHandler(
 
     const error : ErrorType = {
         title,
-        type:"Server Side Error"
+        type:"SERVER_ERROR"
     }
 
     res.status(status).json(error);
