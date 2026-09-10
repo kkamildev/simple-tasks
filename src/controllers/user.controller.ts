@@ -57,6 +57,7 @@ export const register = asyncWrap(async (req, res) => {
         res.status(201).json({registered:true})
     } else {
         const code = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 6)();
+        // TODO: code send operation by email
         const hashedCode = await bcrypt.hash(code, process.env.SALT_ROUNDS || "12");
         setEmailVerifications([...getEmailVerifications().filter((obj) => obj.email != email), {
             email,
@@ -104,8 +105,18 @@ export const verifyEmail = asyncWrap(async (req, res) => {
 export const updateEmail = asyncWrap(async (req, res) => {
     const authReq = req as AuthRequest<UserPayload>;
     const {email} = req.body;
-    setUsers(getUsers().map((obj) => obj.id === authReq.auth.id ? ({...obj, email}) : obj))
-    res.status(200).json({success:true})
+
+    const user = getUsers().find((obj) => obj.id === authReq.auth.id);
+    if(user) {
+        user.email = email;
+        res.send(200).json({success:true})
+    } else {
+        const error : ErrorType = {
+            title:"User not found",
+            type:"NOT_FOUND"
+        }
+        res.status(404).json(error)
+    }
 });
 
 // PUT
@@ -113,6 +124,16 @@ export const updatePassword = asyncWrap(async (req, res) => {
     const authReq = req as AuthRequest<UserPayload>;
     const {newPassword} = req.body;
     const hashedPassword = await bcrypt.hash(newPassword, process.env.SALT_ROUNDS || "12")
-    setUsers(getUsers().map((obj) => obj.id === authReq.auth.id ? ({...obj, password:hashedPassword}) : obj))
-    res.status(200).json({success:true})
+
+    const user = getUsers().find((obj) => obj.id === authReq.auth.id);
+    if(user) {
+        user.password = hashedPassword;
+        res.send(200).json({success:true})
+    } else {
+        const error : ErrorType = {
+            title:"User not found",
+            type:"NOT_FOUND"
+        }
+        res.status(404).json(error)
+    }
 });
