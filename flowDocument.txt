@@ -27,8 +27,15 @@ Return: Access Token with Refresh Token
 --------------------
 
 --------------------
+GET /api/users/logout
+Data: none
+Main Goal: remove access and refresh token
+Return: success infos
+--------------------
+
+--------------------
 POST /api/users/verify
-Data: email, emailCode
+Data: email, code
 Main Goal: Verify email with code
 Return: valid or not valid code
 --------------------
@@ -56,7 +63,7 @@ return tasks
 
 --------------------
 POST /api/tasks
-Data:ACCESS_TOKEN, title, content, deadline, priority, createdAt
+Data:ACCESS_TOKEN, title, content, deadline, priority
 Main Goal: register new task by user
 return new task
 --------------------

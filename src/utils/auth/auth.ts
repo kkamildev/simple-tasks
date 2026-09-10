@@ -23,6 +23,9 @@ export const createRefreshToken = <T extends object>(res : Response, payload : T
         });
 }
 
+export const clearAccessToken = (res : Response) => {
+    res.setHeader("X-New-Access-Token", "");
+}
 
 export const auth = <T extends JwtPayload>() => {
     const createAccessToken = (req : AuthRequest<T>, res : Response, next : NextFunction) => {
