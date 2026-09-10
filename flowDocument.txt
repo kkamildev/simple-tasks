@@ -5,6 +5,13 @@ Simple Tasks App
 
 
 --------------------
+GET /api/users/email
+Data: email
+Main Goal: check if email exist
+Return: email existence
+--------------------
+
+--------------------
 POST /api/users/register
 Data: email, password
 Main Goal: create new user account
@@ -25,4 +32,47 @@ Data: email, emailCode
 Main Goal: Verify email with code
 Return: valid or not valid code
 --------------------
+
+--------------------
+PUT /api/users/email
+Data: ACCESS_TOKEN, email
+Main Goal: Change email adress
+return operation success
+--------------------
+
+--------------------
+PUT /api/users/password
+Data: ACCESS_TOKEN, new password
+Main Goal: Change password
+return operation success
+--------------------
+
+--------------------
+GET /api/tasks
+Data:ACCESS_TOKEN, sortBy(priority, deadline)
+Main Goal: display all available task by user
+return tasks
+--------------------
+
+--------------------
+POST /api/tasks
+Data:ACCESS_TOKEN, title, content, deadline, priority, createdAt
+Main Goal: register new task by user
+return new task
+--------------------
+
+--------------------
+PUT /api/tasks
+Data:ACCESS_TOKEN, task-id, new-title, new-content, new-deadline, new-priority
+Main Goal: Change task data by user
+return operation success info
+--------------------
+
+--------------------
+DELETE /api/tasks
+Data:ACCESS_TOKEN, task-id
+Main Goal: Delete task due to completion
+return operation success info
+--------------------
+
 
