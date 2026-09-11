@@ -29,6 +29,7 @@
     "express-rate-limit": "^8.7.0",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.24.3",
-    "nanoid": "^6.0.1"
+    "nanoid": "^6.0.1",
+    "nodemailer": "^10.0.8"
   }
 }

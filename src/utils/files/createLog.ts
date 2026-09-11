@@ -12,11 +12,11 @@ export const createLog = async (logName : LogName, content : string, folderPath 
             fs.mkdirSync(dir, { recursive: true });
         }
     
-        const logPath = path.join(dir, folderPath, `log-${(new Date()).toISOString().slice(2, 10)}.txt`);
+        const logPath = path.join(dir, `log-${(new Date()).toISOString().slice(2, 10)}.txt`);
 
         const logContent = `[${formatDate(new Date())}] ${logName} -> ${content}`;
         if(process.env.ENABLE_LOGGING) {
-            await appendFile(logPath, logContent);
+            await appendFile(logPath, logContent + "\n");
         }
         console.log(logContent);
     } catch(err) {
