@@ -14,11 +14,12 @@ router.post("/register", registerValidator, register);
 
 router.post("/login", loginValidator, login);
 
+router.post("/verify", verifyEmailValidator, verifyEmail);
+
 router.use(auth<UserPayload>());
 
 router.get("/logout", logout);
 
-router.post("/verify", verifyEmailValidator, verifyEmail);
 
 router.put("/email", updateEmailValidator, updateEmail);
 

@@ -48,7 +48,7 @@ export const updateTask = asyncWrap(async (req, res) => {
         task.title = title;
         task.deadline = deadline;
         task.priority = priority;
-        res.send(200).json({success:true})
+        res.status(200).json({success:true})
     } else {
         const error : ErrorType = {
             title:"Task not found",

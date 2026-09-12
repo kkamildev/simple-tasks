@@ -3,7 +3,7 @@ import { validate } from "../utils/handlers/validate";
 
 
 export const getTasksValidator = [
-    query("sortBy").notEmpty().withMessage("required").isWhitelisted(["priority", "deadline"]).withMessage("only options <priority, deadline>"),
+    query("sortBy").notEmpty().withMessage("required").isIn(["priority", "deadline"]).withMessage("only options <priority, deadline>"),
     validate
 ]
 

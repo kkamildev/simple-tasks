@@ -48,7 +48,7 @@ export const register = asyncWrap(async (req, res) => {
     const verified = getEmailVerifications().find((obj) => obj.verified && obj.email === email);
     if(verified) {
         setEmailVerifications([...getEmailVerifications().filter((obj) => obj != verified)]);
-        const hashedPassword = await bcrypt.hash(password, process.env.SALT_ROUNDS || "12");
+        const hashedPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUNDS) || 12);
         const id = nanoid();
         setUsers([...getUsers(), {
             id,
@@ -60,37 +60,48 @@ export const register = asyncWrap(async (req, res) => {
     } else {
         const code = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 6)();
         await sendEmail(genVerificationEmail(email, code));
-        const hashedCode = await bcrypt.hash(code, process.env.SALT_ROUNDS || "12");
+        const hashedCode = await bcrypt.hash(code, Number(process.env.SALT_ROUNDS) || 12);
         setEmailVerifications([...getEmailVerifications().filter((obj) => obj.email != email), {
             email,
             expirationDate:new Date(Date.now() + 5 * 60 * 1000),
             code: hashedCode,
             verified:false
         }])
-        res.send(200).json({emailSent:true});
+        res.status(200).json({emailSent:true});
     }
 });
 
 // POST
 export const login = asyncWrap(async (req, res) => {
-    const {email, password} = req.body;
-    const user = getUsers().find((user) => user.email === email && bcrypt.compareSync(password, user.password));
-    if(user) {
-        createRefreshToken<UserPayload>(res, {id:user.id}, 3600 * 24 * 7);
-        res.status(200).json({success:true})
-    } else {
-        const error : ErrorType = {
-            title:"Invalid login info",
-            type:"AUTH_ERROR"
-        }
-        res.send(403).json(error);
+    const { email, password } = req.body;
+
+    const user = getUsers().find(u => u.email === email);
+
+    if (!user) {
+        return res.status(403).json({
+            title: "Invalid login info",
+            type: "AUTH_ERROR"
+        });
     }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+        return res.status(403).json({
+            title: "Invalid login info",
+            type: "AUTH_ERROR"
+        });
+    }
+
+    createRefreshToken<UserPayload>(res, { id: user.id }, 3600 * 24 * 7);
+
+    return res.status(200).json({ success: true });
 });
 
 // POST
 export const verifyEmail = asyncWrap(async (req, res) => {
     const {email, code} = req.body;
-    const record = getEmailVerifications().find((obj) => obj.email == email && bcrypt.compareSync(code, obj.code) && obj.expirationDate < new Date());
+    const record = getEmailVerifications().find((obj) => obj.email == email && bcrypt.compareSync(code, obj.code) && obj.expirationDate > new Date());
     if(!record) {
         const error : ErrorType = {
             title:"Verification failed",
@@ -111,7 +122,7 @@ export const updateEmail = asyncWrap(async (req, res) => {
     const user = getUsers().find((obj) => obj.id === authReq.auth.id);
     if(user) {
         user.email = email;
-        res.send(200).json({success:true})
+        res.status(200).json({success:true})
     } else {
         const error : ErrorType = {
             title:"User not found",
@@ -124,13 +135,13 @@ export const updateEmail = asyncWrap(async (req, res) => {
 // PUT
 export const updatePassword = asyncWrap(async (req, res) => {
     const authReq = req as AuthRequest<UserPayload>;
-    const {newPassword} = req.body;
-    const hashedPassword = await bcrypt.hash(newPassword, process.env.SALT_ROUNDS || "12")
+    const {password} = req.body;
+    const hashedPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUNDS) || 12)
 
     const user = getUsers().find((obj) => obj.id === authReq.auth.id);
     if(user) {
         user.password = hashedPassword;
-        res.send(200).json({success:true})
+        res.status(200).json({success:true})
     } else {
         const error : ErrorType = {
             title:"User not found",
