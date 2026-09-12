@@ -3,10 +3,12 @@ import { getEmailVerifications, getUsers, setEmailVerifications, setUsers } from
 import bcrypt from "bcrypt"
 import { asyncWrap } from "../utils/handlers";
 import { AuthRequest, ErrorType } from "../utils/types";
-import { auth, clearAccessToken, createRefreshToken } from "../utils/auth";
+import { clearAccessToken, createRefreshToken } from "../utils/auth";
+import { sendEmail } from "../utils/third";
+import { genVerificationEmail } from "../third/mailTemplates";
 
 
-interface UserPayload {
+export interface UserPayload {
     id:string,
 }
 
@@ -22,7 +24,7 @@ export const emailAvailable = asyncWrap(async (req, res) => {
         }
         return res.status(409).json(error);
     }
-    res.status(200).json({available:false})
+    res.status(200).json({available:true})
 });
 
 // GET
@@ -57,7 +59,7 @@ export const register = asyncWrap(async (req, res) => {
         res.status(201).json({registered:true})
     } else {
         const code = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 6)();
-        // TODO: code send operation by email
+        await sendEmail(genVerificationEmail(email, code));
         const hashedCode = await bcrypt.hash(code, process.env.SALT_ROUNDS || "12");
         setEmailVerifications([...getEmailVerifications().filter((obj) => obj.email != email), {
             email,

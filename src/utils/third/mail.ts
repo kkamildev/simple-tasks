@@ -17,7 +17,7 @@ export const prepareTransporter = () => {
         createLog("WARN", "No specified MAIL_USER");
     }
     if(!process.env.MAIL_PASSWORD) {
-        createLog("WARN", "No specified MAIL_USER");
+        createLog("WARN", "No specified MAIL_PASSWORD");
     }
 
     transporter = nodemailer.createTransport({

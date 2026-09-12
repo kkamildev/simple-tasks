@@ -51,10 +51,17 @@ export const auth = <T extends JwtPayload>() => {
         }
     }
 
-    return (req: AuthRequest<T>, res: Response, next: NextFunction) => {
-        const authHeader = req.headers.authorization;
+    return (req: Request, res: Response, next: NextFunction) => {
 
-        if (!authHeader) return;
+        const typedReq = req as AuthRequest<T>
+
+        const authHeader = req.headers.authorization;
+        
+
+        if (!authHeader) {
+            createAccessToken(typedReq, res, next);
+            return;
+        }
 
         const token = authHeader.split(" ")[1];
 
@@ -64,10 +71,10 @@ export const auth = <T extends JwtPayload>() => {
                 process.env.ACCESS_TOKEN_SECRET || "JHj6hVKkPkj5yTknpLu4A"
             ) as T;
 
-            req.auth = decoded;
+            typedReq.auth = decoded;
             next();
         } catch (err) {
-            createAccessToken(req, res, next);
+            createAccessToken(typedReq, res, next);
         }
     };
 }

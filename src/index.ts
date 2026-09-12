@@ -1,26 +1,31 @@
 
 import express from "express"
-import {Request, Response} from "express"
 import { createLog } from "./utils/files/createLog";
-import { serverErrorHandler } from "./utils/handlers";
+import { notFoundHandler, serverErrorHandler, serveStaticFiles } from "./utils/handlers";
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
+import { prepareTransporter } from "./utils/third";
+import { taskRoutes, userRoutes } from "./routes";
+import path from "node:path";
 
 
 
 const run = async () => {
     dotenv.config();
     const app = express();
+    prepareTransporter();
+
+
     app.use(express.json());
     app.use(cookieParser(process.env.COOKIE_SECRET || "huuygiiuyyg2jhnbbn"))
 
+    app.use(serveStaticFiles(path.join("app", "dist")));
 
-    app.get("/", (req : Request, res : Response) => {
-        res.json({message:"Got users", users:[
-            "Adam", "Karol", "Sebastian"
-        ]});
-    })
 
+    app.use("/api/users", userRoutes);
+    app.use("/api/tasks", taskRoutes);
+
+    app.use(notFoundHandler());
     app.use(serverErrorHandler);
 
 

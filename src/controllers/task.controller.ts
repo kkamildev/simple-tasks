@@ -1,14 +1,16 @@
 import { nanoid } from "nanoid";
 import { getTasks, setTasks } from "../mock";
 import { asyncWrap } from "../utils/handlers";
-import { ErrorType } from "../utils/types";
+import { AuthRequest, ErrorType } from "../utils/types";
+import { UserPayload } from "./user.controller";
 
 
 // GET
 export const tasks = asyncWrap(async (req, res) => {
+    const typedReq = req as AuthRequest<UserPayload>;
     const {sortby} = req.query;
 
-    const tasks = getTasks();
+    const tasks = getTasks().filter((obj) => obj.userId === typedReq.auth.id);
     if(sortby == "priority") {
         tasks.sort((a, b) => b.priority - a.priority);
     } else {
@@ -19,10 +21,12 @@ export const tasks = asyncWrap(async (req, res) => {
 
 // POST
 export const createTask = asyncWrap(async (req, res) => {
+    const typedReq = req as AuthRequest<UserPayload>;
     const {title, content, deadline, priority} = req.body;
 
     const task = {
         id:nanoid(),
+        userId:typedReq.auth.id,
         title,
         content,
         createdAt:new Date(),
@@ -35,9 +39,10 @@ export const createTask = asyncWrap(async (req, res) => {
 
 // PUT
 export const updateTask = asyncWrap(async (req, res) => {
+    const typedReq = req as AuthRequest<UserPayload>;
     const {id, title, content, deadline, priority} = req.body;
 
-    const task = getTasks().find((obj) => obj.id === id);
+    const task = getTasks().filter((obj) => obj.userId === typedReq.auth.id).find((obj) => obj.id === id);
     if(task) {
         task.content = content;
         task.title = title;
@@ -55,7 +60,8 @@ export const updateTask = asyncWrap(async (req, res) => {
 
 // DELETE
 export const deleteTask = asyncWrap(async (req, res) => {
+    const typedReq = req as AuthRequest<UserPayload>;
     const {id} = req.body;
-    setTasks(getTasks().filter((obj) => obj.id !== id));
+    setTasks(getTasks().filter((obj) => obj.id !== id || obj.userId !== typedReq.auth.id));
     res.status(200).json({success:true})
 })
