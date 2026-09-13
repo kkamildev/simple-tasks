@@ -21,9 +21,9 @@ router.use(auth<UserPayload>());
 router.get("/logout", logout);
 
 
-router.put("/email", updateEmailValidator, updateEmail);
+router.patch("/email", updateEmailValidator, updateEmail);
 
-router.put("/password", updatePasswordValidator, updatePassword);
+router.patch("/password", updatePasswordValidator, updatePassword);
 
 
 export default router;

@@ -7,6 +7,7 @@ import dotenv from "dotenv"
 import { prepareTransporter } from "./utils/third";
 import { taskRoutes, userRoutes } from "./routes";
 import path from "node:path";
+import { corsErrorHandler, createCorsPolicy } from "./utils/auth";
 
 
 
@@ -22,12 +23,16 @@ const run = async () => {
     app.use(serveStaticFiles(path.join("app", "dist")));
 
     app.use(createRateLimit(10, 60));
+    app.use(createCorsPolicy(["http://localhost:5173"]));
 
 
     app.use("/api/users", userRoutes);
     app.use("/api/tasks", taskRoutes);
 
+
     app.use(notFoundHandler());
+
+    app.use(corsErrorHandler);
     app.use(serverErrorHandler);
 
 
