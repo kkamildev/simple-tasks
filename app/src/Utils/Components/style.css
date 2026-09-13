@@ -1,0 +1,101 @@
+
+@import "tailwindcss";
+
+/*
+    UTILS STYLES
+*/
+
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
+
+@layer utilities {
+  .custom-scroll-dark::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scroll-dark::-webkit-scrollbar-track {
+    background: theme('colors.neutral.800');
+  }
+
+  .custom-scroll-dark::-webkit-scrollbar-thumb {
+    background: theme('colors.neutral.600');
+    border-radius: 4px;
+  }
+
+  .custom-scroll-dark::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.neutral.500');
+  }
+  .custom-scroll-dark {
+    scrollbar-width: thin;
+    scrollbar-color: #4b4b4b #1f1f1f;
+  }
+
+  .custom-scroll-dark::-webkit-scrollbar {
+      width: 8px;
+  }
+
+  .custom-scroll-dark::-webkit-scrollbar-track {
+      background: #1f1f1f;
+  }
+
+  .custom-scroll-dark::-webkit-scrollbar-thumb {
+      background: #4b4b4b;
+      border-radius: 4px;
+  }
+
+  .custom-scroll-light {
+    scrollbar-width: thin;
+    scrollbar-color: #cfcfcf #f5f5f5;
+  }
+
+  .custom-scroll-light::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scroll-light::-webkit-scrollbar-track {
+    background: #f5f5f5;
+  }
+
+  .custom-scroll-light::-webkit-scrollbar-thumb {
+    background: #cfcfcf;
+    border-radius: 4px;
+  }
+
+  .custom-scroll-light::-webkit-scrollbar-thumb:hover {
+    background: #b5b5b5;
+  }
+
+}
+
+
+body {
+    @apply dark:bg-zinc-900
+}
+
+.btn {
+    @apply px-4 py-2 m-2 text-xl font-bold text-white rounded-md transition-all duration-150 ease-in-out cursor-pointer
+}
+.btn-show {
+    @apply hover:scale-105
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes slide-down {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(20px); opacity: 0; }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+}
+.animate-slide-down {
+  animation: slide-down 0.5s ease-out forwards;
+}

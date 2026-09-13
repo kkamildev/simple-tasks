@@ -1,10 +1,12 @@
 
 import './App.css'
+import "./Utils/Components/style.css"
+import LandingPage from './Pages/LandingPage'
 
 function App() {
 
   return (
-      <h1>Hello world</h1>
+      <LandingPage/>
   )
 }
 
