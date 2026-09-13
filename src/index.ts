@@ -1,7 +1,7 @@
 
 import express from "express"
 import { createLog } from "./utils/files/createLog";
-import { notFoundHandler, serverErrorHandler, serveStaticFiles } from "./utils/handlers";
+import { createRateLimit, notFoundHandler, serverErrorHandler, serveStaticFiles } from "./utils/handlers";
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import { prepareTransporter } from "./utils/third";
@@ -17,9 +17,11 @@ const run = async () => {
 
 
     app.use(express.json());
-    app.use(cookieParser(process.env.COOKIE_SECRET || "huuygiiuyyg2jhnbbn"))
+    app.use(cookieParser(process.env.COOKIE_SECRET || "huuygiiuyyg2jhnbbn"));
 
     app.use(serveStaticFiles(path.join("app", "dist")));
+
+    app.use(createRateLimit(10, 60));
 
 
     app.use("/api/users", userRoutes);
@@ -32,8 +34,6 @@ const run = async () => {
     app.listen(Number(process.env.PORT || "3000"), "0.0.0.0", () => {
         createLog("OK", `Server started, listening on port ${Number(process.env.PORT || "3000")}`)
     });
-
-
 }
 
 
