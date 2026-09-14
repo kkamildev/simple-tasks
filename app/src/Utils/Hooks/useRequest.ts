@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import axios, { AxiosResponse, type AxiosRequestConfig } from "axios";
 import { useErrorStore, useGlobalErrorStore, useLoadingStore} from "../Stores";
 
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 export type ErrorBody = {
   title: string;
@@ -41,6 +41,7 @@ export function useRequest() {
           POST: () => axios.post(url, body, config),
           PUT: () => axios.put(url, body, config),
           DELETE: () => axios.delete(url, config),
+          PATCH:() => axios.patch(url, body, config)
         };
 
         const res = await methods[method]();
