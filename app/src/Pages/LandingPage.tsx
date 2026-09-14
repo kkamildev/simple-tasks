@@ -69,7 +69,7 @@ const LandingPage : FC<Props> = ({}) => {
                     <section className="my-5 flex flex-col items-center">
                         <h1 className="font-bold text-green-500 text-4xl lg:text-5xl tracking-widest text-center">So Let's start</h1>
                         <BaseSeparator style="dark:bg-green-500! bg-green-500! mt-4 lg:w-[25%] w-[75%] rounded-md"/>
-                        <h2 className="font-bold dark:text-white text-zinc-800 text-2xl lg:text-3xl text-center mt-5">Click this button to create an account</h2>
+                        <h2 className="font-bold dark:text-white text-zinc-800 text-2xl lg:text-3xl text-center mt-5 w-100 lg:w-auto">Click this button to create an account</h2>
                     </section>
                     <section className="flex flex-col gap-y-10 items-center mt-10 text-center">
                         <button className="btn btn-show bg-green-600 hover:bg-green-500 lg:text-3xl! text-2xl!">Create account</button>
@@ -79,10 +79,27 @@ const LandingPage : FC<Props> = ({}) => {
             </main>
             <footer className="border-t-4 border-t-green-500 p-4 dark:bg-zinc-900 bg-neutral-200">
                 <h1 className="dark:text-white text-black font-bold text-2xl lg:text-start text-center p-2">Simple Tasks In Development</h1>
-                <p className="text-zinc-600 font-bold text-lg lg:text-start text-center ml-3">App created by: <a className="text-green-500" href="https://github.com/kkamildev" target="_blank">Kkamildev<FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a></p>
-                <section className="flex lg:flex-row flex-col justify-start gap-x-10 mt-10">
+                <p className="text-zinc-600 font-bold text-lg lg:text-start text-center ml-3">App created by: <a className="text-green-500" href="https://github.com/kkamildev" target="_blank">Kkamildev <FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a></p>
+                <section className="flex xl:flex-row flex-col justify-start gap-x-20 mt-10 mx-10">
+                    <div className="text-xl dark:text-white text-black flex-1">
+                        <h2 className="h-7.5">Company</h2>
+                        <BaseSeparator style="w-full h-[1px]"/>
+                        <div className="flex flex-col mt-2">
+                            <p className=" p-3! m-0! font-medium! dark:text-white! text-black! rounded-none!">Company S.A</p>
+                            <p className=" p-3! m-0! font-medium! dark:text-white! text-black! rounded-none!">Adress: ul.Grzegórzecka 12, Kraków</p>
+                            <p className=" p-3! m-0! font-medium! dark:text-white! text-black! rounded-none!">NIP: 86687551241</p>
+                        </div>
+                    </div>
+                    <div className="text-xl dark:text-white text-black flex-1">
+                        <h2 className="h-7.5">Contact</h2>
+                        <BaseSeparator style="w-full h-[1px]"/>
+                        <div className="flex flex-col mt-2">
+                            <p className=" p-3! m-0! font-medium! dark:text-white! text-black! rounded-none!">Email: something@gmail.com</p>
+                            <p className=" p-3! m-0! font-medium! dark:text-white! text-black! rounded-none!">Phone: +48 123123123</p>
+                        </div>
+                    </div>
                     <div className="text-2xl dark:text-white text-black flex-1">
-                        <h2>Socials</h2>
+                        <h2 className="h-7.5">Socials</h2>
                         <BaseSeparator style="w-full h-[1px]"/>
                         <div className="flex flex-col mt-2">
                             <a href="https://instagram.com" target="_blank" className="btn p-3! m-0! dark:hover:bg-zinc-100/5 hover:bg-zinc-800/5 font-medium! dark:text-white! text-black! rounded-none!">Instagram <FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a>
@@ -90,13 +107,12 @@ const LandingPage : FC<Props> = ({}) => {
                             <a href="https://tiktok.com" target="_blank" className="btn p-3! m-0! dark:hover:bg-zinc-100/5 hover:bg-zinc-800/5 font-medium! dark:text-white! text-black! rounded-none!">Tiktok <FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a>
                         </div>
                     </div>
-                    <div className="text-2xl dark:text-white text-black flex-1">
-                        <h2>Socials</h2>
+                    <div className="text-xl dark:text-white text-black flex-1">
+                        <h2 className="h-7.5">Documents</h2>
                         <BaseSeparator style="w-full h-[1px]"/>
                         <div className="flex flex-col mt-2">
-                            <a href="https://instagram.com" target="_blank" className="btn p-3! m-0! dark:hover:bg-zinc-100/5 hover:bg-zinc-800/5 font-medium! dark:text-white! text-black! rounded-none!">Instagram <FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a>
-                            <a href="https://facebook.com" target="_blank" className="btn p-3! m-0! dark:hover:bg-zinc-100/5 hover:bg-zinc-800/5 font-medium! dark:text-white! text-black! rounded-none!">Facebook <FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a>
-                            <a href="https://tiktok.com" target="_blank" className="btn p-3! m-0! dark:hover:bg-zinc-100/5 hover:bg-zinc-800/5 font-medium! dark:text-white! text-black! rounded-none!">Tiktok <FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a>
+                            <a href="/privacyPolicy.pdf" target="_blank" className="btn p-3! m-0! dark:hover:bg-zinc-100/5 hover:bg-zinc-800/5 font-medium! dark:text-white! text-black! rounded-none!">Privacy Policy <FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a>
+                            <a href="/termsOfService.pdf" target="_blank" className="btn p-3! m-0! dark:hover:bg-zinc-100/5 hover:bg-zinc-800/5 font-medium! dark:text-white! text-black! rounded-none!">Terms of service <FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a>
                         </div>
                     </div>
                 </section>
