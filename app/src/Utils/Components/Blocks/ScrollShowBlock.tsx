@@ -1,33 +1,37 @@
 import { useEffect, useRef, useState, type FC, type ReactNode } from "react";
-import { isVisibleRef } from "../../Scroll";
 
 type Props = {
-    style?:string,
-    children:ReactNode
-}
+    style?: string;
+    children: ReactNode;
+};
 
-const ScrollShowBlock : FC<Props> = ({children, style = ""}) => {
+const ScrollShowBlock: FC<Props> = ({ children, style = "" }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => {
-            if (isVisibleRef(ref)) {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
                 setVisible(true);
+                observer.disconnect(); // animacja tylko raz
             }
-        };
+        }, {
+            threshold: 0.2 // 20% elementu musi być widoczne
+        });
 
-        handleScroll();
+        if (ref.current) observer.observe(ref.current);
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        return () => observer.disconnect();
     }, []);
 
     return (
-        <section ref={ref} className={`${style} ${visible ? "animate-slide-up" : "opacity-0"}`}>
+        <section
+            ref={ref}
+            className={`${style} ${visible ? "animate-slide-up" : "opacity-0"}`}
+        >
             {children}
         </section>
     );
-}
+};
 
 export default ScrollShowBlock;
