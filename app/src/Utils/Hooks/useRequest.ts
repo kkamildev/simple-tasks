@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import axios, { AxiosResponse, type AxiosRequestConfig } from "axios";
+import axios, { type AxiosResponse, type AxiosRequestConfig } from "axios";
 import { useErrorStore, useGlobalErrorStore, useLoadingStore} from "../Stores";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";

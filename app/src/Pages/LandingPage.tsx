@@ -1,25 +1,43 @@
-import type { FC } from "react";
+import { useEffect, type FC } from "react";
 import { ScrollResponsibleBlock, ScrollShowBlock } from "../Utils/Components/Blocks";
 import { BaseSeparator } from "../Utils/Components/Separators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare, faCode, faGears } from "@fortawesome/free-solid-svg-icons";
 import { faSmile} from "@fortawesome/free-regular-svg-icons";
+import { useUserApi } from "../Api";
+import { Link, useNavigate } from "react-router-dom";
 
 type Props = {
 
 }
 
 const LandingPage : FC<Props> = ({}) => {
+
+    const userApi = useUserApi();
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        const authUser = async () => {
+            const result = await userApi.auth("");
+            if(result) {
+                navigate("/app");
+            }
+        }
+        authUser();
+    }, []);
+
     return (
         <>
             <ScrollResponsibleBlock style="fixed transition-all duration-500 ease-in-out left-0 right-0 z-20" upStyle="top-0" downStyle="top-[-75px]">
                 <nav className="border-b-4 border-green-500 p-2 flex justify-between h-18.75 dark:bg-zinc-900 bg-neutral-200">
                     <section className="flex items-center gap-x-4 ml-3">
-                        <img src="/favicon.png" alt="app logo" className="w-[50px]" />
+                        <img src="/favicon.png" alt="app logo" className="w-12.5" />
                         <h1 className="font-bold dark:text-white text-neutral-800 text-2xl">Simple Tasks</h1>
                     </section>
                     <section className="flex items-center mr-3">
-                        <button className="btn bg-green-600 hover:bg-green-500">Login</button>
+                        <Link to="/login">
+                            <button className="btn bg-green-600 hover:bg-green-500">Login</button>
+                        </Link>
                     </section>
                 </nav>
             </ScrollResponsibleBlock>

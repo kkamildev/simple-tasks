@@ -22,7 +22,7 @@ const run = async () => {
 
     app.use(serveStaticFiles(path.join("app", "dist")));
 
-    app.use(createRateLimit(10, 60));
+    app.use(createRateLimit(50, 60));
     app.use(createCorsPolicy(["http://localhost:5173"]));
 
 
