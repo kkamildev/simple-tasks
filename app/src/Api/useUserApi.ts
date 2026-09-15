@@ -22,6 +22,7 @@ export const useUserApi = () => {
         return {timeout:5000, withCredentials:true}
     }
 
+
     const request = useRequest();
     return {
         emailAvailable:async(email : string, reqId : string) => {
@@ -41,6 +42,11 @@ export const useUserApi = () => {
         },
         login:async(email : string, password : string, reqId : string) => {
             return await request.send("POST", "/api/users/login", genConfigWithoutAuth(), {email, password}, reqId, (res) => {
+                saveAccessToken(res)
+            })
+        },
+        auth:async (reqId : string) => {
+            return await request.send("GET", "/api/users/auth", genConfigWithoutAuth(), {}, reqId, (res) => {
                 saveAccessToken(res)
             })
         },

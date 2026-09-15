@@ -34,6 +34,12 @@ export const logout = asyncWrap(async (req, res) => {
     res.status(200).json({success:true});
 })
 
+// GET
+export const getUser = asyncWrap(async (req, res) => {
+    const authReq = req as AuthRequest<UserPayload>;
+    res.status(200).json(authReq.auth);
+})
+
 // POST
 export const register = asyncWrap(async (req, res) => {
     const {email, password} = req.body;
