@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { emailAvailable, getUser, login, logout, register, updateEmail, updatePassword, UserPayload, verifyEmail } from "../controllers/user.controller";
+import { autoLogin, emailAvailable, login, logout, register, updateEmail, updatePassword, UserPayload, verifyEmail } from "../controllers/user.controller";
 import { auth } from "../utils/auth";
 import { emailAvailableValidator, loginValidator, registerValidator, updateEmailValidator, updatePasswordValidator, verifyEmailValidator } from "../validators";
 
@@ -18,7 +18,7 @@ router.post("/verify", verifyEmailValidator, verifyEmail);
 
 router.use(auth<UserPayload>());
 
-router.get("/auth", getUser);
+router.get("/auth", autoLogin);
 
 router.get("/logout", logout);
 

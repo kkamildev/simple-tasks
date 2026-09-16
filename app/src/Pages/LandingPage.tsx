@@ -90,7 +90,9 @@ const LandingPage : FC<Props> = ({}) => {
                         <h2 className="font-bold dark:text-white text-zinc-800 text-2xl lg:text-3xl text-center mt-5 w-100 lg:w-auto">Click this button to create an account</h2>
                     </section>
                     <section className="flex flex-col gap-y-10 items-center mt-10 text-center">
-                        <button className="btn btn-show bg-green-600 hover:bg-green-500 lg:text-3xl! text-2xl!">Create account</button>
+                        <Link to="/register">
+                            <button className="btn btn-show bg-green-600 hover:bg-green-500 lg:text-3xl! text-2xl!">Create account</button>
+                        </Link>
                     </section>
                 </ScrollShowBlock>
                 <div className="h-50"></div>

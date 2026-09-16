@@ -35,10 +35,12 @@ export const logout = asyncWrap(async (req, res) => {
 })
 
 // GET
-export const getUser = asyncWrap(async (req, res) => {
+export const autoLogin = asyncWrap(async (req, res) => {
     const authReq = req as AuthRequest<UserPayload>;
+    createRefreshToken<UserPayload>(res, { id: authReq.auth.id }, 3600 * 24 * 7);
     res.status(200).json(authReq.auth);
 })
+
 
 // POST
 export const register = asyncWrap(async (req, res) => {
@@ -62,7 +64,7 @@ export const register = asyncWrap(async (req, res) => {
             password:hashedPassword
         }])
         createRefreshToken<UserPayload>(res, {id}, 3600 * 24 * 7);
-        res.status(201).json({registered:true})
+        res.status(201).json({id});
     } else {
         const code = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 6)();
         await sendEmail(genVerificationEmail(email, code));
@@ -101,8 +103,9 @@ export const login = asyncWrap(async (req, res) => {
 
     createRefreshToken<UserPayload>(res, { id: user.id }, 3600 * 24 * 7);
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({id:user.id});
 });
+
 
 // POST
 export const verifyEmail = asyncWrap(async (req, res) => {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, type FC } from "react";
+import { useMemo, type FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserApi } from "../Api";
 import { BaseSeparator } from "../Utils/Components/Separators";
@@ -18,17 +18,8 @@ type Props = {
 const LoginPage : FC<Props> = ({}) => {
     const userApi = useUserApi();
     const navigate = useNavigate();
-    
-    useEffect(() => {
-        const authUser = async () => {
-            const result = await userApi.auth("");
-            if(result) {
-                navigate("/app");
-            }
-        }
-        authUser();
-    }, []);
 
+    
     const validators = useMemo(() => {
         return [
             {
