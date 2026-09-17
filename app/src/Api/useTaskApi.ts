@@ -18,6 +18,15 @@ export type TaskToUpdate = {
     deadline:Date,
 }
 
+export type Task = {
+    id:string,
+    title:string,
+    content:string,
+    priority:number,
+    deadline:Date,
+    createdAt:Date
+}
+
 
 export const useTaskApi = () => {
 
@@ -55,7 +64,7 @@ export const useTaskApi = () => {
             })
         },
         delete:async(id : string, reqId : string) => {
-            return await request.send("DELETE", "/api/tasks", genBaseConfig(), {id}, reqId, (res) => {
+            return await request.send("DELETE", "/api/tasks", {...genBaseConfig(), data:{id}}, {}, reqId, (res) => {
                 saveAccessToken(res)
             })
         }

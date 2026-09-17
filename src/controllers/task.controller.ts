@@ -8,10 +8,9 @@ import { UserPayload } from "./user.controller";
 // GET
 export const tasks = asyncWrap(async (req, res) => {
     const typedReq = req as AuthRequest<UserPayload>;
-    const {sortby} = req.query;
-
+    const {sortBy} = req.query;
     const tasks = getTasks().filter((obj) => obj.userId === typedReq.auth.id);
-    if(sortby == "priority") {
+    if(sortBy == "priority") {
         tasks.sort((a, b) => b.priority - a.priority);
     } else {
         tasks.sort((a, b) => a.deadline.getTime() - b.deadline.getTime());
