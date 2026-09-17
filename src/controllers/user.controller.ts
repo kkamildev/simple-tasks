@@ -128,16 +128,25 @@ export const updateEmail = asyncWrap(async (req, res) => {
     const authReq = req as AuthRequest<UserPayload>;
     const {email} = req.body;
 
-    const user = getUsers().find((obj) => obj.id === authReq.auth.id);
-    if(user) {
-        user.email = email;
-        res.status(200).json({success:true})
+    const emailAlreadyExist = getUsers().some((user) => user.id !== authReq.auth.id && user.email === email)
+    if(emailAlreadyExist) {
+        const user = getUsers().find((obj) => obj.id === authReq.auth.id);
+        if(user) {
+            user.email = email;
+            res.status(200).json({success:true})
+        } else {
+            const error : ErrorType = {
+                title:"User not found",
+                type:"NOT_FOUND"
+            }
+            res.status(404).json(error)
+        }
     } else {
         const error : ErrorType = {
-            title:"User not found",
-            type:"NOT_FOUND"
+            title:"That email already exist",
+            type:"CONFLICT_ERROR"
         }
-        res.status(404).json(error)
+        return res.status(409).json(error);
     }
 });
 

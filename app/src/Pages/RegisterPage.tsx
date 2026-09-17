@@ -70,9 +70,11 @@ const RegisterPage : FC<Props> = ({}) => {
 
     const registerSubmit = async () => {
         if(checkComplete()) {
-            const result = await userApi.register(getData("email")?.value || "", getData("password")?.value || "", "register");
-            if(result) {
-                setVerifyEmail(true);
+            if(getData("password")?.value == getData("repeatedPassword")?.value) {
+                const result = await userApi.register(getData("email")?.value || "", getData("password")?.value || "", "register");
+                if(result) {
+                    setVerifyEmail(true);
+                }
             }
         }
     }

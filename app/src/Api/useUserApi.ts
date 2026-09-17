@@ -52,7 +52,8 @@ export const useUserApi = () => {
         },
         logout:async(reqId : string) => {
             return await request.send("GET", "/api/users/logout", genBaseConfig(), {}, reqId, (res) => {
-                saveAccessToken(res)
+                saveAccessToken(res);
+                res.data
             })
         },
         updateEmail:async(email : string, reqId : string) => {
