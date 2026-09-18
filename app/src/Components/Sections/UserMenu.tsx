@@ -96,6 +96,7 @@ const UserMenu : FC<Props> = ({backState}) => {
             <section className="flex flex-col items-center gap-y-1 mt-5">
                 <Accordion title="Set new email" buttonStyle="font-bold! btn w-100! m-0! dark:hover:bg-zinc-800! hover:bg-zinc-200! text-2xl! text-left! text-black! dark:text-white!">
                     <Form onSubmit={() => submitEmailChanging()}>
+                        <h2 className="text-center font-bold text-green-500 text-2xl">Enter new Email</h2>
                         <section className="m-3">
                             <InputField
                                 id="email"
@@ -125,6 +126,7 @@ const UserMenu : FC<Props> = ({backState}) => {
                 </Accordion>
                 <Accordion title="Set new password" buttonStyle="font-bold! btn w-100! m-0! dark:hover:bg-zinc-800! hover:bg-zinc-200! text-2xl! text-left! text-black! dark:text-white!">
                     <Form onSubmit={() => submitPasswordChanging()}>
+                        <h2 className="text-center font-bold text-green-500 text-2xl">Enter new Password</h2>
                         <section className="m-3 flex flex-col gap-y-1">
                             <InputField
                                 id="password"

@@ -3,12 +3,14 @@ import { useTaskApi, useUserApi, type SortByType, type Task } from "../Api";
 import { useNavigate } from "react-router-dom";
 import { FixedButton } from "../Utils/Components/Popups";
 import UserMenu from "../Components/Sections/UserMenu";
-import { faPlus, faSpinner, faUserGear } from "@fortawesome/free-solid-svg-icons";
+import {  faPlus, faSpinner, faUserGear, } from "@fortawesome/free-solid-svg-icons";
 import { ScrollShowBlock } from "../Utils/Components/Blocks";
 import { RadioGroup } from "../Utils/Components/Input";
 import { ReverseLoader, SpinLoader } from "../Utils/Components/Loaders";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TaskModel from "../Components/Models/TaskModel";
+import CompleteConfirmation from "../Components/Popups/CompleteConfirmation";
+import TaskView from "../Components/Popups/TaskView";
 
 type Props = {
 
@@ -23,6 +25,8 @@ const MainPage : FC<Props> = ({}) => {
     const [userMenuActive, setUserMenuActive] = useState<boolean>(false);
 
     const [filter, setFilter] = useState<SortByType>("priority");
+    const [deleteId, setDeleteId] = useState<string>("");
+    const [vievedTask, setVievedTask] = useState<Task | null>(null);
     const [tasks, setTasks] = useState<Task[]>([]);
 
     useEffect(() => {
@@ -57,6 +61,19 @@ const MainPage : FC<Props> = ({}) => {
         <>
             {
                 !userMenuActive ? <>
+                    <CompleteConfirmation
+                        clearDeleteId={() => setDeleteId("")}
+                        deleteTask={deleteTask}
+                        deleteId={deleteId}
+                    />
+                    {
+                        vievedTask && 
+                        <TaskView
+                            data={vievedTask}
+                            onClose={() => setVievedTask(null)}
+                        />
+                    }
+
                     <FixedButton
                         icon={faUserGear}
                         style="bg-green-600! hover:bg-green-500! hover:scale-100! top-4! left-4! text-xl"
@@ -90,9 +107,13 @@ const MainPage : FC<Props> = ({}) => {
                             <FontAwesomeIcon icon={faSpinner} className="text-6xl text-center"/>
                         </SpinLoader>
                         <ReverseLoader reqId="getTasks">
-                            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mx-2 lg:mx-10 my-5 gap-7">
+                            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mx-5 lg:mx-10 my-5 gap-7">
                                 {
-                                    tasks.map((task, index) => <TaskModel onDelete={deleteTask} number={index + 1} key={task.id} data={task}/>)
+                                    tasks.map((task, index) => <TaskModel onSetView={(task) => setVievedTask(task)}
+                                        onDelete={(id) => setDeleteId(id)}
+                                        number={index + 1}
+                                        key={task.id}
+                                        data={task}/>)
                                 }
                             </section>
                         </ReverseLoader>
