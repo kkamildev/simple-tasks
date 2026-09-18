@@ -1,9 +1,9 @@
 import { useEffect, useState, type FC } from "react";
 import { useTaskApi, useUserApi, type SortByType, type Task } from "../Api";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { FixedButton } from "../Utils/Components/Popups";
 import UserMenu from "../Components/Sections/UserMenu";
-import {  faPlus, faSpinner, faUserGear, } from "@fortawesome/free-solid-svg-icons";
+import {  faSpinner, faUserGear, } from "@fortawesome/free-solid-svg-icons";
 import { ScrollShowBlock } from "../Utils/Components/Blocks";
 import { RadioGroup } from "../Utils/Components/Input";
 import { ReverseLoader, SpinLoader } from "../Utils/Components/Loaders";
@@ -11,6 +11,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TaskModel from "../Components/Models/TaskModel";
 import CompleteConfirmation from "../Components/Popups/CompleteConfirmation";
 import TaskView from "../Components/Popups/TaskView";
+import InsertTaskForm from "../Components/Forms/InsertTaskForm";
+import { ErrorDisplay } from "../Utils/Components/Notifications";
 
 type Props = {
 
@@ -43,7 +45,7 @@ const MainPage : FC<Props> = ({}) => {
         const getTasks = async() => {
             const result = await taskApi.get(filter, "getTasks")
             if(result) {
-                const tasks : Task[] = result.tasks.map((obj: any) => ({...obj, deadline:new Date(obj.deadline), createdAt:new Date(obj.deadline)}))
+                const tasks : Task[] = result.tasks.map((obj: any) => ({...obj, deadline:new Date(obj.deadline), createdAt:new Date(obj.createdAt)}))
                 setTasks(tasks);
             }
         }
@@ -73,7 +75,9 @@ const MainPage : FC<Props> = ({}) => {
                             onClose={() => setVievedTask(null)}
                         />
                     }
-
+                    <InsertTaskForm
+                        addTask={(task) => setTasks((prev) => [...prev, task])}
+                    />
                     <FixedButton
                         icon={faUserGear}
                         style="bg-green-600! hover:bg-green-500! hover:scale-100! top-4! left-4! text-xl"
@@ -106,6 +110,9 @@ const MainPage : FC<Props> = ({}) => {
                         <SpinLoader reqId="getTasks">
                             <FontAwesomeIcon icon={faSpinner} className="text-6xl text-center"/>
                         </SpinLoader>
+                        <ErrorDisplay reqId="getTasks" errorType="AUTH_ERROR">
+                            <Navigate replace to="/"/>
+                        </ErrorDisplay>
                         <ReverseLoader reqId="getTasks">
                             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mx-5 lg:mx-10 my-5 gap-7">
                                 {
@@ -118,11 +125,6 @@ const MainPage : FC<Props> = ({}) => {
                             </section>
                         </ReverseLoader>
                     </main>
-                    <FixedButton
-                        icon={faPlus}
-                        style="bg-green-600! hover:bg-green-500! hover:scale-100! text-xl"
-                        onClick={() => setUserMenuActive(true)}
-                    />
                 </>
                 :
                 <UserMenu backState={() => setUserMenuActive(false)}/>

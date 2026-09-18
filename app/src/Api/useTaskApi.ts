@@ -54,7 +54,7 @@ export const useTaskApi = () => {
             })
         },
         insert:async(taskData : TaskToInsert, reqId : string) => {
-            return await request.send("POST", "/api/tasks", genBaseConfig(), {...taskData}, reqId, (res) => {
+            return await request.send("POST", "/api/tasks", genBaseConfig(), {...taskData, deadline:taskData.deadline.toISOString()}, reqId, (res) => {
                 saveAccessToken(res)
             })
         },

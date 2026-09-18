@@ -23,7 +23,7 @@ const AreaTextField : FC<Props> = ({id, title, subtitle, style = "", placeholder
             <section className={`flex gap-x-3 p-2 items-center border-3 rounded-md dark:border-white ${style}`}>
                 <textarea id={id}
                 autoComplete="off" autoCapitalize="off" spellCheck={false}
-                className={`flex-[1_1_auto] focus:outline-0 min-w-0 dark:text-white ${areaStyle}`} placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)}/>
+                className={`flex-[1_1_auto] resize-none focus:outline-0 min-w-0 dark:text-white ${areaStyle}`} placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)}/>
             </section>
             <section className="flex justify-end mr-4">
                 {

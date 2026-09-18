@@ -13,7 +13,7 @@ const CenterPopup : FC<Props> = ({children, onNonFocusClick = () => {}}) => {
                     onNonFocusClick();
                 }
             }}
-        className="top-0 left-0 bottom-0 right-0 fixed bg-black/50 z-30 flex justify-center items-center">
+        className="top-0 left-0 bottom-0 right-0 fixed bg-black/50 z-30 flex justify-center items-center overflow-y-auto">
             {children}
         </section>
     )

@@ -16,7 +16,7 @@ const CompleteConfirmation : FC<Props> = ({deleteId, clearDeleteId, deleteTask})
         <CenterPopup onNonFocusClick={clearDeleteId}>
             <ScrollShowBlock>
                 <section className="dark:bg-zinc-900 bg-zinc-200 p-4 rounded-md">
-                    <h1 className="my-6 font-bold text-center text-4xl">You are sure?</h1>
+                    <h1 className="my-6 font-bold text-center text-4xl">Are you sure?</h1>
                     <div className="flex flex-col lg:flex-row gap-x-4">
                         <button onClick={() => {
                             deleteTask(deleteId);

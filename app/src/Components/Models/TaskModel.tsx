@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faPen, faSpinner } from "@fortawesome/free-solid-svg-icons"
 import { faEye } from "@fortawesome/free-regular-svg-icons"
 import { ReverseLoader, SpinLoader } from "../../Utils/Components/Loaders"
+import { ErrorDisplay } from "../../Utils/Components/Notifications"
+import { Navigate } from "react-router-dom"
 
 
 type Props = {
@@ -47,6 +49,9 @@ const TaskModel : FC<Props> = ({data, number, onDelete, onSetView}) => {
                         <FontAwesomeIcon icon={faSpinner}/>
                     </SpinLoader>
                 </button>
+                <ErrorDisplay reqId={`delete-${data.id}`} errorType="AUTH_ERROR">
+                    <Navigate replace to="/"/>
+                </ErrorDisplay>
             </div>
         </div>
     )
