@@ -2,6 +2,7 @@
 import { Sequelize } from "sequelize-typescript";
 import { EmailVerification, Task, User } from "../models";
 
+
 export const sequelize = new Sequelize({
     database: process.env.DB_NAME || "simple_tasks_db",
     dialect: "mysql",

@@ -48,12 +48,15 @@ const UpdateTaskForm : FC<Props> = ({updateTask, defaultTask, backAction}) => {
     
     const [getData, update, getErrors,, checkComplete] = useForm(validators);
 
+    const formatDateTimeLocal = (date : Date) => date ? new Date(date).toLocaleString("sv-SE").replace(" ", "T").slice(0, 16) : "";
+
     useEffect(() => {
         update("title", defaultTask?.title || "");
         update("content", defaultTask?.content || "");
-        update("deadline", defaultTask?.deadline.toISOString() || "");
+        update("deadline", formatDateTimeLocal(defaultTask?.deadline || new Date()));
         update("priority", defaultTask?.priority.toString() || "");
     }, [defaultTask]);
+
 
 
     const updateSubmit = async () => {

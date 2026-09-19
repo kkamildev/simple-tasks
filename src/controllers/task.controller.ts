@@ -3,18 +3,23 @@ import { getTasks, setTasks } from "../mock";
 import { asyncWrap } from "../utils/handlers";
 import { AuthRequest, ErrorType } from "../utils/types";
 import { UserPayload } from "./user.controller";
+import { Task} from "../models";
 
 
 // GET
 export const tasks = asyncWrap(async (req, res) => {
     const typedReq = req as AuthRequest<UserPayload>;
     const {sortBy} = req.query;
-    const tasks = getTasks().filter((obj) => obj.userId === typedReq.auth.id);
-    if(sortBy == "priority") {
-        tasks.sort((a, b) => b.priority - a.priority);
-    } else {
-        tasks.sort((a, b) => a.deadline.getTime() - b.deadline.getTime());
-    }
+
+    const tasks = await Task.findAll({
+        where:{
+            userId:typedReq.auth.id
+        },
+        order:
+        sortBy === "priority"
+        ? [["priority", "DESC"]]
+        : [["deadline", "ASC"]]
+    })
     res.status(200).json({tasks})
 })
 
@@ -23,16 +28,13 @@ export const createTask = asyncWrap(async (req, res) => {
     const typedReq = req as AuthRequest<UserPayload>;
     const {title, content, deadline, priority} = req.body;
 
-    const task = {
-        id:nanoid(),
+    const task = await Task.create({
         userId:typedReq.auth.id,
         title,
         content,
-        createdAt:new Date(),
-        deadline:deadline,
+        deadline,
         priority
-    }
-    setTasks([...getTasks(), task])
+    })
     res.status(201).json({task})
 });
 
@@ -41,12 +43,9 @@ export const updateTask = asyncWrap(async (req, res) => {
     const typedReq = req as AuthRequest<UserPayload>;
     const {id, title, content, deadline, priority} = req.body;
 
-    const task = getTasks().filter((obj) => obj.userId === typedReq.auth.id).find((obj) => obj.id === id);
-    if(task) {
-        task.content = content;
-        task.title = title;
-        task.deadline = deadline;
-        task.priority = priority;
+    const [affectedRows] = await Task.update({title, content, deadline, priority}, {where:{id, userId:typedReq.auth.id}});
+
+    if(affectedRows) {
         res.status(200).json({success:true})
     } else {
         const error : ErrorType = {
@@ -61,6 +60,16 @@ export const updateTask = asyncWrap(async (req, res) => {
 export const deleteTask = asyncWrap(async (req, res) => {
     const typedReq = req as AuthRequest<UserPayload>;
     const {id} = req.body;
-    setTasks(getTasks().filter((obj) => obj.id !== id || obj.userId !== typedReq.auth.id));
-    res.status(200).json({success:true})
+
+    const deleted = await Task.destroy({where:{id, userId:typedReq.auth.id}})
+
+    if(deleted) {
+        res.status(200).json({success:true})
+    } else {
+        const error : ErrorType = {
+            title:"Task not found",
+            type:"NOT_FOUND"
+        }
+        res.status(404).json(error)
+    }
 })

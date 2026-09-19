@@ -14,7 +14,6 @@ export const createMysqlDatabase = async (dbName : string) => {
     const conn = await pool.getConnection();
     await conn.ping();
     conn.release();
-    console.log("1");
     const [rows] = await pool.execute<RowDataPacket[]>("SHOW DATABASES")
     if (rows.some((obj) => obj.Database == dbName)) {
       createLog("OK", "Creation of database skipped");

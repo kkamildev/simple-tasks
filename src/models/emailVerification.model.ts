@@ -14,7 +14,7 @@ export class EmailVerification extends Model {
     declare email:string;
 
     @AllowNull(false)
-    @Column(DataType.CHAR(6))
+    @Column(DataType.CHAR(60))
     declare code:string;
 
     @AllowNull(false)

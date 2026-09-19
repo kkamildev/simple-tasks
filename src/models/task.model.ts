@@ -42,6 +42,11 @@ export class Task extends Model {
 
     @AllowNull(false)
     @Column(DataType.TINYINT({unsigned:true}))
-    declare priority:number
+    declare priority:number;
+
+    @AllowNull(false)
+    @Default(() => new Date())
+    @Column(DataType.DATE())
+    declare createdAt:Date
     
 }
