@@ -37,7 +37,7 @@ const InputError : FC<Props> = ({content, enableAnimation = true, iconStyle = ""
 
     return (
         <section className="flex items-center justify-start">
-            <p ref={boxRef} className={`m-1 p-1 pr-2 font-bold text-red-700 rounded-md flex items-center gap-x-1 ${style}`}>
+            <p ref={boxRef} className={`mt-1 p-1 pr-2 font-bold text-red-700 rounded-md flex items-center gap-x-1 ${style}`}>
                 <FontAwesomeIcon icon={faCircleXmark} className={`text-xl ${iconStyle}`}/> {content}
             </p>
         </section>

@@ -14,9 +14,10 @@ type Props = {
     number:number;
     onDelete:(id : string) => void;
     onSetView:(task : Task) => void;
+    onUpdate:(task : Task) => void;
 }
 
-const TaskModel : FC<Props> = ({data, number, onDelete, onSetView}) => {
+const TaskModel : FC<Props> = ({data, number, onDelete, onSetView, onUpdate}) => {
 
     return (
         <div className="p-4 shadow-md shadow-green-500/50 rounded-xl hover:scale-102 transition-transform duration-100 ease-in-out flex flex-col justify-between">
@@ -39,7 +40,7 @@ const TaskModel : FC<Props> = ({data, number, onDelete, onSetView}) => {
             <div className="flex justify-between m-1 mt-4">
                 <div className="flex gap-x-3">
                     <button onClick={() => onSetView(data)} title="Show more" className="btn bg-blue-600 hover:bg-blue-500 text-base! m-0!"><FontAwesomeIcon icon={faEye}/></button>
-                    <button title="Edit task" className="btn bg-blue-600 hover:bg-blue-500 text-base! m-0!"><FontAwesomeIcon icon={faPen}/></button>
+                    <button onClick={() => onUpdate(data)} title="Edit task" className="btn bg-blue-600 hover:bg-blue-500 text-base! m-0!"><FontAwesomeIcon icon={faPen}/></button>
                 </div>
                 <button title="Complete this task" onClick={() => onDelete(data.id)} className="btn bg-green-600 hover:bg-green-500 text-base! m-0!">
                     <ReverseLoader reqId={`delete-${data.id}`}>

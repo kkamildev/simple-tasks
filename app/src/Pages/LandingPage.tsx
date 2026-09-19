@@ -100,7 +100,7 @@ const LandingPage : FC<Props> = ({}) => {
             <footer className="border-t-4 border-t-green-500 p-4 dark:bg-zinc-900 bg-neutral-200">
                 <h1 className="dark:text-white text-black font-bold text-2xl lg:text-start text-center p-2">Simple Tasks In Development</h1>
                 <p className="text-zinc-600 font-bold text-lg lg:text-start text-center ml-3">App created by: <a className="text-green-500" href="https://github.com/kkamildev" target="_blank">Kkamildev <FontAwesomeIcon icon={faArrowUpRightFromSquare}/></a></p>
-                <section className="flex xl:flex-row flex-col justify-start gap-x-20 mt-10 mx-10">
+                <section className="flex xl:flex-row flex-col justify-start gap-x-20 my-10 mx-10">
                     <div className="text-xl dark:text-white text-black flex-1">
                         <h2 className="h-7.5">Company</h2>
                         <BaseSeparator style="w-full h-[1px]"/>

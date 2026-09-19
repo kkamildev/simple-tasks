@@ -13,6 +13,7 @@ import CompleteConfirmation from "../Components/Popups/CompleteConfirmation";
 import TaskView from "../Components/Popups/TaskView";
 import InsertTaskForm from "../Components/Forms/InsertTaskForm";
 import { ErrorDisplay } from "../Utils/Components/Notifications";
+import UpdateTaskForm from "../Components/Forms/UpdateTaskForm";
 
 type Props = {
 
@@ -26,10 +27,21 @@ const MainPage : FC<Props> = ({}) => {
 
     const [userMenuActive, setUserMenuActive] = useState<boolean>(false);
 
-    const [filter, setFilter] = useState<SortByType>("priority");
     const [deleteId, setDeleteId] = useState<string>("");
+    const [editTask, setEditTask] = useState<Task | null>(null);
     const [vievedTask, setVievedTask] = useState<Task | null>(null);
+
+
+    const [filter, setFilter] = useState<SortByType>("priority");
     const [tasks, setTasks] = useState<Task[]>([]);
+
+    const getTasks = async() => {
+        const result = await taskApi.get(filter, "getTasks")
+        if(result) {
+            const tasks : Task[] = result.tasks.map((obj: any) => ({...obj, deadline:new Date(obj.deadline), createdAt:new Date(obj.createdAt)}))
+            setTasks(tasks);
+        }
+    }
 
     useEffect(() => {
         const authUser = async () => {
@@ -42,13 +54,6 @@ const MainPage : FC<Props> = ({}) => {
     }, []);
 
     useEffect(() => {
-        const getTasks = async() => {
-            const result = await taskApi.get(filter, "getTasks")
-            if(result) {
-                const tasks : Task[] = result.tasks.map((obj: any) => ({...obj, deadline:new Date(obj.deadline), createdAt:new Date(obj.createdAt)}))
-                setTasks(tasks);
-            }
-        }
         getTasks();
     }, [filter]);
 
@@ -75,6 +80,11 @@ const MainPage : FC<Props> = ({}) => {
                             onClose={() => setVievedTask(null)}
                         />
                     }
+                    <UpdateTaskForm
+                        defaultTask={editTask}
+                        backAction={() => setEditTask(null)}
+                        updateTask={() => getTasks()}
+                    />
                     <InsertTaskForm
                         addTask={(task) => setTasks((prev) => [...prev, task])}
                     />
@@ -116,7 +126,9 @@ const MainPage : FC<Props> = ({}) => {
                         <ReverseLoader reqId="getTasks">
                             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mx-5 lg:mx-10 my-5 gap-7">
                                 {
-                                    tasks.map((task, index) => <TaskModel onSetView={(task) => setVievedTask(task)}
+                                    tasks.map((task, index) => <TaskModel
+                                        onSetView={(task) => setVievedTask(task)}
+                                        onUpdate={(task) => setEditTask(task)}
                                         onDelete={(id) => setDeleteId(id)}
                                         number={index + 1}
                                         key={task.id}

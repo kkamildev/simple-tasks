@@ -56,7 +56,7 @@ const InsertTaskForm : FC<Props> = ({addTask}) => {
                 title:getData("title")?.value || "",
                 content:getData("content")?.value || "",
                 deadline:new Date(getData("deadline")?.value || ""),
-                priority:parseInt(getData("priority")?.value || "0")
+                priority:parseInt(getData("priority")?.value || "1")
             }, "insert-task");
             if(result) {
                 const task = result.task;
