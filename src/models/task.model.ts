@@ -17,7 +17,6 @@ export class Task extends Model {
     declare id:string;
 
     @ForeignKey(() => User)
-    @Unique
     @Index
     @Column(DataType.STRING)
     declare userId:string;

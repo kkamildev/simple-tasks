@@ -45,15 +45,7 @@ export const updateTask = asyncWrap(async (req, res) => {
 
     const [affectedRows] = await Task.update({title, content, deadline, priority}, {where:{id, userId:typedReq.auth.id}});
 
-    if(affectedRows) {
-        res.status(200).json({success:true})
-    } else {
-        const error : ErrorType = {
-            title:"Task not found",
-            type:"NOT_FOUND"
-        }
-        res.status(404).json(error)
-    }
+    res.status(200).json({success:true})
 });
 
 // DELETE
