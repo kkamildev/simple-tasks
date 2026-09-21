@@ -1,6 +1,5 @@
 import { useEffect, useState, type FC } from "react";
 import { useTaskApi, useUserApi, type SortByType, type Task } from "../Api";
-import { Navigate, useNavigate } from "react-router-dom";
 import { FixedButton } from "../Utils/Components/Popups";
 import UserMenu from "../Components/Sections/UserMenu";
 import {  faSpinner, faUserGear, } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +11,6 @@ import TaskModel from "../Components/Models/TaskModel";
 import CompleteConfirmation from "../Components/Popups/CompleteConfirmation";
 import TaskView from "../Components/Popups/TaskView";
 import InsertTaskForm from "../Components/Forms/InsertTaskForm";
-import { ErrorDisplay } from "../Utils/Components/Notifications";
 import UpdateTaskForm from "../Components/Forms/UpdateTaskForm";
 
 type Props = {
@@ -23,7 +21,6 @@ const MainPage : FC<Props> = ({}) => {
 
     const userApi = useUserApi();
     const taskApi = useTaskApi();
-    const navigate = useNavigate();
 
     const [userMenuActive, setUserMenuActive] = useState<boolean>(false);
 
@@ -45,10 +42,7 @@ const MainPage : FC<Props> = ({}) => {
 
     useEffect(() => {
         const authUser = async () => {
-            const result = await userApi.auth("");
-            if(!result) {
-                navigate("/");
-            }
+            await userApi.auth("");
         }
         authUser();
     }, []);
@@ -120,9 +114,6 @@ const MainPage : FC<Props> = ({}) => {
                         <SpinLoader reqId="getTasks">
                             <FontAwesomeIcon icon={faSpinner} className="text-6xl text-center"/>
                         </SpinLoader>
-                        <ErrorDisplay reqId="getTasks" errorType="AUTH_ERROR">
-                            <Navigate replace to="/"/>
-                        </ErrorDisplay>
                         <ReverseLoader reqId="getTasks">
                             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mx-5 lg:mx-10 my-5 gap-7">
                                 {

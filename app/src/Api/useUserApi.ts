@@ -1,13 +1,22 @@
 import type { AxiosResponse } from "axios";
-import { useRequest } from "../Utils/Hooks"
+import { useRequest, type ErrorBody } from "../Utils/Hooks"
+import { useNavigate } from "react-router-dom";
 
 
 export const useUserApi = () => {
+
+    const navigate = useNavigate();
 
 
     const saveAccessToken = (res : AxiosResponse) => {
         if(res.headers["x-new-access-token"]) {
             localStorage.setItem("ACCESS_TOKEN", res.headers["x-new-access-token"]);
+        }
+    }
+
+    const checkAuthError = (error : ErrorBody) => {
+        if(error.type == "AUTH_ERROR") {
+            navigate("/");
         }
     }
 
@@ -47,24 +56,23 @@ export const useUserApi = () => {
         },
         auth:async (reqId : string) => {
             return await request.send("GET", "/api/users/auth", genConfigWithoutAuth(), {}, reqId, (res) => {
-                saveAccessToken(res)
-            })
+                saveAccessToken(res);
+            }, (error) => checkAuthError(error))
         },
         logout:async(reqId : string) => {
             return await request.send("GET", "/api/users/logout", genBaseConfig(), {}, reqId, (res) => {
                 saveAccessToken(res);
-                res.data
-            })
+            }, (error) => checkAuthError(error))
         },
         updateEmail:async(email : string, reqId : string) => {
             return await request.send("PATCH", "/api/users/email", genBaseConfig(), {email}, reqId, (res) => {
                 saveAccessToken(res)
-            })
+            }, (error) => checkAuthError(error))
         },
         updatePassword:async(password : string, reqId : string) => {
             return await request.send("PATCH", "/api/users/password", genBaseConfig(), {password}, reqId, (res) => {
                 saveAccessToken(res)
-            })
+            }, (error) => checkAuthError(error))
         }
     }
 }

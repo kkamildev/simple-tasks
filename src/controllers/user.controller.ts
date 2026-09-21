@@ -145,7 +145,7 @@ export const updateEmail = asyncWrap(async (req, res) => {
     const authReq = req as AuthRequest<UserPayload>;
     const {email} = req.body;
     const emailExist = await User.count({where:{email}});
-    if(emailExist) {
+    if(!emailExist) {
         const [affectedRows] = await User.update({email}, {where:{id:authReq.auth.id}})
         if(affectedRows) {
             res.status(200).json({success:true})

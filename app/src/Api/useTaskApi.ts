@@ -1,5 +1,6 @@
 import type { AxiosResponse } from "axios";
-import { useRequest } from "../Utils/Hooks";
+import { useRequest, type ErrorBody } from "../Utils/Hooks";
+import { useNavigate } from "react-router-dom";
 
 export type SortByType = "deadline" | "priority";
 
@@ -30,11 +31,17 @@ export type Task = {
 
 export const useTaskApi = () => {
 
+    const navigate = useNavigate()
 
-    
     const saveAccessToken = (res : AxiosResponse) => {
         if(res.headers["x-new-access-token"]) {
             localStorage.setItem("ACCESS_TOKEN", res.headers["x-new-access-token"]);
+        }
+    }
+
+    const checkAuthError = (error : ErrorBody) => {
+        if(error.type == "AUTH_ERROR") {
+            navigate("/");
         }
     }
 
@@ -51,22 +58,22 @@ export const useTaskApi = () => {
         get:async(sortBy : SortByType, reqId : string) => {
             return await request.send("GET", "/api/tasks?sortBy=" + sortBy, genBaseConfig(), {}, reqId, (res) => {
                 saveAccessToken(res)
-            })
+            }, (error) => checkAuthError(error))
         },
         insert:async(taskData : TaskToInsert, reqId : string) => {
             return await request.send("POST", "/api/tasks", genBaseConfig(), {...taskData, deadline:taskData.deadline.toISOString()}, reqId, (res) => {
                 saveAccessToken(res)
-            })
+            }, (error) => checkAuthError(error))
         },
         update:async(taskData : TaskToUpdate, reqId : string) => {
             return await request.send("PUT", "/api/tasks", genBaseConfig(), {...taskData}, reqId, (res) => {
-                saveAccessToken(res)
-            })
+                saveAccessToken(res);
+            }, (error) => checkAuthError(error))
         },
         delete:async(id : string, reqId : string) => {
             return await request.send("DELETE", "/api/tasks", {...genBaseConfig(), data:{id}}, {}, reqId, (res) => {
-                saveAccessToken(res)
-            })
+                saveAccessToken(res);
+            }, (error) => checkAuthError(error))
         }
     }
 }

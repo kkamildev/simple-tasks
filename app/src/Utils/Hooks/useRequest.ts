@@ -16,7 +16,8 @@ export type SendRequest = <R = any>(
   config?: AxiosRequestConfig,
   body?: any,
   reqId?:string,
-  onResponse?:(response : AxiosResponse) => void
+  onResponse?:(response : AxiosResponse) => void,
+  onError?:(error : ErrorBody) => void
 ) => Promise<R | null>;
 
 export function useRequest() {
@@ -30,10 +31,12 @@ export function useRequest() {
   const deleteError = useErrorStore((state) => state.deleteError);
 
   const send: SendRequest = useCallback(
-    async (method, url, config, body, reqId, onResponse) => {
+    async (method, url, config, body, reqId, onResponse, onError) => {
       if(reqId) {
         addLoader(reqId);
+        deleteError(reqId);
       }
+      
 
       try {
         const methods = {
@@ -45,9 +48,6 @@ export function useRequest() {
         };
 
         const res = await methods[method]();
-        if(reqId) {
-          deleteError(reqId);
-        }
         onResponse && onResponse(res);
         return res.data as any;
 
@@ -61,6 +61,7 @@ export function useRequest() {
             ? "SERVER_ERROR"
             : errorBody?.type || "UNKNOWN_ERROR";
 
+        onError && onError(errorBody);
         if (message === "SERVER_ERROR" || message === "UNKNOWN_ERROR") {
           setGlobalError(errorBody?.title || "Unexpected error", errorBody?.message, errorBody?.type);
         } else if(message == "NETWORK") {

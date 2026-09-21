@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMemo, useState, type FC } from "react"
 import { BaseSeparator } from "../../Utils/Components/Separators";
 import { useUserApi } from "../../Api";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { Accordion } from "../../Utils/Components/Blocks";
 import { Form, InputField } from "../../Utils/Components/Input";
@@ -111,9 +111,6 @@ const UserMenu : FC<Props> = ({backState}) => {
                         <ErrorDisplay reqId="changeEmail" errorType="CONFLICT_ERROR">
                             <InputError enableAnimation content="This email is not available"/>
                         </ErrorDisplay>
-                        <ErrorDisplay reqId="changePassword" errorType="AUTH_ERROR">
-                                <Navigate replace to="/"/>
-                            </ErrorDisplay>
                         <button className="btn hover:bg-green-500 bg-green-600 inline-block">
                             <ReverseLoader reqId="changeEmail">
                                 Change email
@@ -153,9 +150,6 @@ const UserMenu : FC<Props> = ({backState}) => {
                             {
                                 notSamePasswords && <InputError enableAnimation content="Passwords are not the same"/>
                             }
-                            <ErrorDisplay reqId="changePassword" errorType="AUTH_ERROR">
-                                <Navigate replace to="/"/>
-                            </ErrorDisplay>
                         </section>
                         <button className="btn hover:bg-green-500 bg-green-600 inline-block">
                             <ReverseLoader reqId="changePassword">
