@@ -3,6 +3,7 @@ import { CenterPopup } from "../../Utils/Components/Popups";
 import { ScrollShowBlock } from "../../Utils/Components/Blocks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useKeyboard } from "../../Utils/Hooks";
 
 type Props = {
     deleteId:string,
@@ -11,6 +12,14 @@ type Props = {
 }
 
 const CompleteConfirmation : FC<Props> = ({deleteId, clearDeleteId, deleteTask}) => {
+
+    useKeyboard(
+        {
+            Escape:() => clearDeleteId()
+        },
+        true
+    )
+
     return (
         deleteId && 
         <CenterPopup onNonFocusClick={clearDeleteId}>

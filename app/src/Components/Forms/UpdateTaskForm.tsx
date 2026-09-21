@@ -1,6 +1,6 @@
 import { useEffect, useMemo, type FC } from "react";
 import { useTaskApi, type Task } from "../../Api";
-import { useForm } from "../../Utils/Hooks";
+import { useForm, useKeyboard } from "../../Utils/Hooks";
 import { CenterPopup } from "../../Utils/Components/Popups";
 import { ScrollShowBlock } from "../../Utils/Components/Blocks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,17 +18,24 @@ const UpdateTaskForm : FC<Props> = ({updateTask, defaultTask, backAction}) => {
 
     const taskApi = useTaskApi();
 
+    useKeyboard(
+        {
+            Escape:() => backAction()
+        },
+        true
+    )
+
     const validators = useMemo(() => [
         {
             fieldId:"title",
             errorMessages:["Required", "Too long"],
-            validations:[/.+/, /^.{0,50}$/],
+            validations:[/.+/, /^[\s\S]{0,50}$/],
             required:true
         },
         {
             fieldId:"content",
             errorMessages:["Required", "Too long"],
-            validations:[/.+/, /^.{0,2000}$/],
+            validations:[/.+/, /^[\s\S]{0,2000}$/],
             required:true
         },
         {

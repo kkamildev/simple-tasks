@@ -3,7 +3,7 @@ import { CenterPopup, FixedButton } from "../../Utils/Components/Popups";
 import { ScrollShowBlock } from "../../Utils/Components/Blocks";
 import { faPlus, faSpinner, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { AreaTextField, Form, InputField } from "../../Utils/Components/Input";
-import { useForm } from "../../Utils/Hooks";
+import { useForm, useKeyboard } from "../../Utils/Hooks";
 import { useTaskApi, type Task } from "../../Api";
 import { ReverseLoader, SpinLoader } from "../../Utils/Components/Loaders";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +17,13 @@ const InsertTaskForm : FC<Props> = ({addTask}) => {
 
     const taskApi = useTaskApi();
 
+    useKeyboard(
+        {
+            Escape:() => setActive(false)
+        },
+        true
+    )
+
     const [active, setActive] = useState<boolean>(false);
 
 
@@ -25,13 +32,13 @@ const InsertTaskForm : FC<Props> = ({addTask}) => {
         {
             fieldId:"title",
             errorMessages:["Required", "Too long"],
-            validations:[/.+/, /^.{0,50}$/],
+            validations:[/.+/, /^[\s\S]{0,50}$/],
             required:true
         },
         {
             fieldId:"content",
             errorMessages:["Required", "Too long"],
-            validations:[/.+/, /^.{0,2000}$/],
+            validations:[/.+/, /^[\s\S]{0,2000}$/],
             required:true
         },
         {
